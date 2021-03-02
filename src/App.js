@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ExchangeRates from "./ExchangeRates";
 
 import exchangeApi from "./exchangeApi";
@@ -8,13 +8,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [conversionRates, setConversionRates] = useState({});
 
-  const loadConversionRates = () => {
+  const loadConversionRates = useCallback(() => {
     setIsLoading(true);
     exchangeApi(currency).then((exchangeRate) => {
       setIsLoading(false);
       setConversionRates(exchangeRate.conversion_rates || {});
     });
-  };
+  }, [currency]);
 
   const onChangeCurrency = (event) => {
     setCurrency(event.target.value);
@@ -23,8 +23,7 @@ function App() {
 
   useEffect(() => {
     loadConversionRates();
-  }, [])
-
+  }, [loadConversionRates]);
 
   return (
     <div>

@@ -12,7 +12,9 @@ function App() {
     setIsLoading(true);
     exchangeApi(currency).then((exchangeRate) => {
       setIsLoading(false);
-      setConversionRates(exchangeRate.conversion_rates || {});
+      const conversionRates = {...exchangeRate.conversion_rates}
+      delete conversionRates[currency];
+      setConversionRates(conversionRates || {});
     });
   }, [currency]);
 
